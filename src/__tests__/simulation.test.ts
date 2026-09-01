@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { runSimulation, reproducibleResult, runPerturbationTrials } from '../engine/simulation.js';
 import { getScenario, listScenarios } from '../engine/scenarios.js';
+import { computeAllMetrics, robustness } from '../engine/metrics.js';
 
 describe('Simulation Engine', () => {
     describe('Full trial run', () => {
@@ -107,7 +108,7 @@ describe('Simulation Engine', () => {
     });
 
     describe('Perturbation trials for robustness', () => {
-        it('runs multiple trials with perturbed seeds', () => {
+        it('runs multiple trials with perturbed seeds and exercises the robustness metric', () => {
             const scenario = getScenario('high_uncertainty');
             const actions = ['proceed', 'proceed', 'proceed', 'proceed', 'proceed'];
 
@@ -118,6 +119,20 @@ describe('Simulation Engine', () => {
                 expect(o).toBeGreaterThanOrEqual(0);
                 expect(o).toBeLessThanOrEqual(1);
             }
+
+            // Explicity verify the robustness metric works with these outcomes
+            const trial = runSimulation(scenario, 200, actions);
+
+            const metrics = computeAllMetrics(trial.finalState, trial.decisions, scenario, outcomes);
+
+            // High uncertainty with these actions typically yields some variance.
+            // If identical, expected robustness = 1.0. If varying, expected < 1.0.
+            expect(metrics.robustness).toBeGreaterThanOrEqual(0);
+            expect(metrics.robustness).toBeLessThanOrEqual(1);
+
+            // Also checking via metrics module direct invocation
+            const directRobustness = robustness(outcomes);
+            expect(directRobustness).toBe(metrics.robustness);
         });
     });
 

@@ -255,4 +255,39 @@ describe('Metrics Module', () => {
             }
         });
     });
+
+    describe('Pathological Clamping (Edge Cases)', () => {
+        it('clamps all metrics to [0,1] even with extreme synthetic inputs', () => {
+            const extremeState: SimulationState = {
+                currentLayer: 10,
+                totalLayers: 3, // Layer > total
+                stateId: 'end',
+                resources: -500, // Very negative
+                maxResources: 10,
+                timeRemaining: -100, // Very negative
+                maxTime: 10,
+                riskLevel: 5.5, // Massive
+                cumulativeRisk: 1000,
+                decisionCount: 2,
+                revealedInfo: [],
+                allHiddenInfoIds: [],
+                lastDecisionIrreversible: false,
+                currentStrategy: 'bad',
+                terminated: true,
+                terminationReason: 'completed',
+                outcomeScore: 50, // Massive
+            };
+
+            const extremeScenario = { ...baseScenario, reference_score: -0.5, scenario_id: 'extreme' } as ScenarioDefinition;
+
+            const extremeDecisions = makeDecisions(1, { decision_time_ms: -10000 }); // Negative time
+
+            const metrics = computeAllMetrics(extremeState, extremeDecisions, extremeScenario, [100, -100, 500, -500]);
+
+            for (const [key, value] of Object.entries(metrics)) {
+                expect(value, `metric ${key} should be clamped to [0,1] but was ${value}`).toBeGreaterThanOrEqual(0);
+                expect(value, `metric ${key} should be clamped to [0,1] but was ${value}`).toBeLessThanOrEqual(1);
+            }
+        });
+    });
 });
