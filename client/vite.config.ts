@@ -10,4 +10,12 @@ export default defineConfig({
             '@scenarios': path.resolve(__dirname, '../src/scenarios'),
         },
     },
+    server: {
+        proxy: {
+            '/api': {
+                target: 'http://localhost:8000',
+                changeOrigin: true
+            }
+        }
+    }
 });

@@ -16,6 +16,10 @@ export default function Simulate() {
     const [sessionId] = useState(`session_${Date.now()}`);
     const [trialId] = useState(`trial_${scenario.scenario_id}_${Date.now()}`);
 
+    useEffect(() => {
+        import('../store/logger').then(m => m.initializeSession(sessionId));
+    }, [sessionId]);
+
     const [state, setState] = useState<SimulationState>(() => createInitialState(scenario));
     const [obs, setObs] = useState(() => buildObservation(createInitialState(scenario), scenario));
     const [decisions, setDecisions] = useState<DecisionRecord[]>([]);
@@ -65,6 +69,10 @@ export default function Simulate() {
             decision_time_ms: record.decision_time_ms,
             risk_before: record.riskBefore,
             risk_after: record.riskAfter,
+            resources_before: record.resourcesBefore,
+            resources_after: record.resourcesAfter,
+            layer: record.layer,
+            step: record.step,
             outcome: result.nextState.terminationReason
         });
 
@@ -83,6 +91,16 @@ export default function Simulate() {
                 seed: scenario.seed, decisions: updatedDecisions,
                 finalState: result.nextState, metrics
             };
+
+            import('../store/logger').then(m => m.logOutcome({
+                session_id: sessionId,
+                scenario_id: scenario.scenario_id,
+                trial_id: trialId,
+                seed: scenario.seed,
+                termination_reason: result.nextState.terminationReason || 'completed',
+                final_score: result.nextState.outcomeScore || 0,
+                metrics: metrics
+            }));
 
             localStorage.setItem('last_trial', JSON.stringify(trialData));
 
