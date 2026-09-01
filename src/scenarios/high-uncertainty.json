@@ -1,0 +1,291 @@
+{
+    "scenario_id": "high_uncertainty",
+    "title": "Fog of War — High Uncertainty",
+    "description": "Heavy hidden information across all layers. Information gathering is expensive but critical. Tests information-seeking behavior and decision quality under deep uncertainty.",
+    "layers": 5,
+    "states": [
+        {
+            "id": "hu_l0",
+            "layer": 0,
+            "name": "Blind Approach",
+            "description": "Formation layout unknown. Only basic perimeter data available.",
+            "availableActions": [
+                "proceed",
+                "gather_info",
+                "withdraw"
+            ],
+            "irreversible": false
+        },
+        {
+            "id": "hu_l1",
+            "layer": 1,
+            "name": "Unknown Territory",
+            "description": "No prior intelligence on defenses here.",
+            "availableActions": [
+                "proceed",
+                "gather_info",
+                "change_strategy",
+                "withdraw"
+            ],
+            "irreversible": false
+        },
+        {
+            "id": "hu_l2",
+            "layer": 2,
+            "name": "Deep Fog",
+            "description": "Multiple possible routes, unknown which are viable.",
+            "availableActions": [
+                "proceed",
+                "gather_info",
+                "change_strategy",
+                "withdraw"
+            ],
+            "irreversible": false
+        },
+        {
+            "id": "hu_l3",
+            "layer": 3,
+            "name": "Critical Junction",
+            "description": "A fork with no visibility ahead. Information is paramount.",
+            "availableActions": [
+                "proceed",
+                "gather_info",
+                "withdraw"
+            ],
+            "irreversible": false
+        },
+        {
+            "id": "hu_l4",
+            "layer": 4,
+            "name": "Near the Center",
+            "description": "One final push through unknown defenses.",
+            "availableActions": [
+                "proceed",
+                "gather_info",
+                "withdraw"
+            ],
+            "irreversible": false
+        },
+        {
+            "id": "hu_success",
+            "layer": 5,
+            "name": "Center Breached",
+            "description": "Successfully navigated through the fog.",
+            "availableActions": [],
+            "irreversible": false
+        },
+        {
+            "id": "hu_trap",
+            "layer": 5,
+            "name": "Ambush Triggered",
+            "description": "Walked into a concealed trap.",
+            "availableActions": [],
+            "irreversible": false
+        },
+        {
+            "id": "hu_lost",
+            "layer": 5,
+            "name": "Lost in Formation",
+            "description": "Disoriented and forced to retreat.",
+            "availableActions": [],
+            "irreversible": false
+        }
+    ],
+    "actions": [],
+    "hidden_information": [
+        {
+            "id": "hu_h1",
+            "layer": 0,
+            "description": "Perimeter sensor array locations",
+            "value": "Sensors placed 30m apart on the northern arc",
+            "revealCost": 4
+        },
+        {
+            "id": "hu_h2",
+            "layer": 1,
+            "description": "First layer defensive strength",
+            "value": "Light defense — bulk of forces are in layers 3-4",
+            "revealCost": 5
+        },
+        {
+            "id": "hu_h3",
+            "layer": 2,
+            "description": "Route viability through the middle",
+            "value": "Eastern route is clear, western route is trapped",
+            "revealCost": 5
+        },
+        {
+            "id": "hu_h4",
+            "layer": 2,
+            "description": "Trap mechanism details",
+            "value": "Pressure-activated collapse, 3-second delay",
+            "revealCost": 6
+        },
+        {
+            "id": "hu_h5",
+            "layer": 3,
+            "description": "Junction routing intelligence",
+            "value": "Left fork leads to ambush, right fork to center",
+            "revealCost": 7
+        },
+        {
+            "id": "hu_h6",
+            "layer": 4,
+            "description": "Final defense composition",
+            "value": "Automated defenses only — no manual response",
+            "revealCost": 4
+        }
+    ],
+    "risk_level": 0.3,
+    "uncertainty_level": 0.85,
+    "resources": 30,
+    "time_limit": 18,
+    "information_cost": 5,
+    "transition_rules": [
+        {
+            "fromState": "hu_l0",
+            "action": "proceed",
+            "toState": "hu_l1",
+            "toLayer": 1,
+            "resourceCost": 3,
+            "timeCost": 1,
+            "riskDelta": 0.1,
+            "irreversible": false,
+            "probability": 1.0,
+            "narrative": "You advance blind into the outer layer."
+        },
+        {
+            "fromState": "hu_l1",
+            "action": "proceed",
+            "toState": "hu_l2",
+            "toLayer": 2,
+            "resourceCost": 4,
+            "timeCost": 2,
+            "riskDelta": 0.15,
+            "irreversible": false,
+            "probability": 0.7,
+            "narrative": "You push into deep fog. Visibility is near zero."
+        },
+        {
+            "fromState": "hu_l1",
+            "action": "proceed",
+            "toState": "hu_trap",
+            "toLayer": 5,
+            "resourceCost": 4,
+            "timeCost": 2,
+            "riskDelta": 0.4,
+            "irreversible": false,
+            "probability": 0.3,
+            "narrative": "Without intelligence, you walk into a concealed position."
+        },
+        {
+            "fromState": "hu_l2",
+            "action": "proceed",
+            "toState": "hu_l3",
+            "toLayer": 3,
+            "resourceCost": 4,
+            "timeCost": 2,
+            "riskDelta": 0.15,
+            "irreversible": false,
+            "probability": 0.6,
+            "narrative": "You navigate through the fog and reach a junction."
+        },
+        {
+            "fromState": "hu_l2",
+            "action": "proceed",
+            "toState": "hu_lost",
+            "toLayer": 5,
+            "resourceCost": 5,
+            "timeCost": 3,
+            "riskDelta": 0.3,
+            "irreversible": false,
+            "probability": 0.4,
+            "narrative": "Disoriented in the deep fog, you lose your bearing."
+        },
+        {
+            "fromState": "hu_l3",
+            "action": "proceed",
+            "toState": "hu_l4",
+            "toLayer": 4,
+            "resourceCost": 5,
+            "timeCost": 2,
+            "riskDelta": 0.1,
+            "irreversible": false,
+            "probability": 0.5,
+            "narrative": "You choose a fork at the junction and push forward."
+        },
+        {
+            "fromState": "hu_l3",
+            "action": "proceed",
+            "toState": "hu_trap",
+            "toLayer": 5,
+            "resourceCost": 5,
+            "timeCost": 2,
+            "riskDelta": 0.35,
+            "irreversible": false,
+            "probability": 0.5,
+            "narrative": "The fork you chose leads directly to an ambush."
+        },
+        {
+            "fromState": "hu_l4",
+            "action": "proceed",
+            "toState": "hu_success",
+            "toLayer": 5,
+            "resourceCost": 5,
+            "timeCost": 2,
+            "riskDelta": 0.2,
+            "irreversible": false,
+            "probability": 1.0,
+            "narrative": "You breach the final defenses and reach the center."
+        }
+    ],
+    "outcomes": [
+        {
+            "stateId": "hu_success",
+            "score": 1.0,
+            "description": "Navigated deep uncertainty and reached the center. Outstanding.",
+            "success": true
+        },
+        {
+            "stateId": "hu_trap",
+            "score": 0.15,
+            "description": "Walked into an ambush. Lack of intelligence was costly.",
+            "success": false
+        },
+        {
+            "stateId": "hu_lost",
+            "score": 0.1,
+            "description": "Lost orientation in the fog. Information gathering would have helped.",
+            "success": false
+        }
+    ],
+    "strategies": [
+        {
+            "id": "scout_first",
+            "name": "Scout First",
+            "description": "Invest heavily in information before advancing."
+        },
+        {
+            "id": "push_through",
+            "name": "Push Through",
+            "description": "Accept uncertainty and advance quickly."
+        },
+        {
+            "id": "balanced",
+            "name": "Balanced",
+            "description": "Scout each layer briefly before advancing."
+        }
+    ],
+    "reference_policy": [
+        "gather_info",
+        "gather_info",
+        "proceed",
+        "gather_info",
+        "proceed",
+        "gather_info",
+        "proceed",
+        "proceed"
+    ],
+    "reference_score": 0.85,
+    "seed": 200
+}

@@ -1,0 +1,165 @@
+{
+    "scenario_id": "tutorial",
+    "title": "The First Gate — Tutorial",
+    "description": "A guided introduction to the decision environment. Low risk, full transparency, generous resources. Learn how actions affect state transitions, how information gathering works, and what withdrawal means.",
+    "layers": 3,
+    "states": [
+        {
+            "id": "t_start",
+            "layer": 0,
+            "name": "Outer Perimeter",
+            "description": "The first layer of the formation. All information is visible.",
+            "availableActions": [
+                "proceed",
+                "gather_info",
+                "withdraw"
+            ],
+            "irreversible": false
+        },
+        {
+            "id": "t_mid",
+            "layer": 1,
+            "name": "Inner Ring",
+            "description": "Deeper position. Some resources are consumed.",
+            "availableActions": [
+                "proceed",
+                "gather_info",
+                "change_strategy",
+                "withdraw"
+            ],
+            "irreversible": false
+        },
+        {
+            "id": "t_deep",
+            "layer": 2,
+            "name": "Nearing the Center",
+            "description": "Close to the objective. Final decision point.",
+            "availableActions": [
+                "proceed",
+                "withdraw"
+            ],
+            "irreversible": false
+        },
+        {
+            "id": "t_success",
+            "layer": 3,
+            "name": "Center Reached",
+            "description": "Successfully navigated all layers.",
+            "availableActions": [],
+            "irreversible": false
+        },
+        {
+            "id": "t_fail",
+            "layer": 3,
+            "name": "Formation Collapsed",
+            "description": "The approach failed due to poor positioning.",
+            "availableActions": [],
+            "irreversible": false
+        }
+    ],
+    "actions": [],
+    "hidden_information": [
+        {
+            "id": "t_hint1",
+            "layer": 1,
+            "description": "The inner ring guard rotation pattern",
+            "value": "Guards rotate every 3 time units, leaving a 1-unit gap",
+            "revealCost": 2
+        },
+        {
+            "id": "t_hint2",
+            "layer": 2,
+            "description": "Structural weakness near the center",
+            "value": "The eastern approach has reduced defenses",
+            "revealCost": 3
+        }
+    ],
+    "risk_level": 0.1,
+    "uncertainty_level": 0.2,
+    "resources": 20,
+    "time_limit": 15,
+    "information_cost": 2,
+    "transition_rules": [
+        {
+            "fromState": "t_start",
+            "action": "proceed",
+            "toState": "t_mid",
+            "toLayer": 1,
+            "resourceCost": 2,
+            "timeCost": 1,
+            "riskDelta": 0.05,
+            "irreversible": false,
+            "probability": 1.0,
+            "narrative": "You advance through the outer perimeter with minimal resistance."
+        },
+        {
+            "fromState": "t_mid",
+            "action": "proceed",
+            "toState": "t_deep",
+            "toLayer": 2,
+            "resourceCost": 3,
+            "timeCost": 2,
+            "riskDelta": 0.1,
+            "irreversible": false,
+            "probability": 0.7,
+            "narrative": "You push deeper into the formation, encountering moderate resistance."
+        },
+        {
+            "fromState": "t_mid",
+            "action": "proceed",
+            "toState": "t_fail",
+            "toLayer": 3,
+            "resourceCost": 3,
+            "timeCost": 2,
+            "riskDelta": 0.3,
+            "irreversible": false,
+            "probability": 0.3,
+            "narrative": "Your advance is repelled — the inner defenses hold firm."
+        },
+        {
+            "fromState": "t_deep",
+            "action": "proceed",
+            "toState": "t_success",
+            "toLayer": 3,
+            "resourceCost": 4,
+            "timeCost": 2,
+            "riskDelta": 0.15,
+            "irreversible": false,
+            "probability": 1.0,
+            "narrative": "You break through the final layer and reach the center."
+        }
+    ],
+    "outcomes": [
+        {
+            "stateId": "t_success",
+            "score": 1.0,
+            "description": "Full success — navigated all three layers and reached the center.",
+            "success": true
+        },
+        {
+            "stateId": "t_fail",
+            "score": 0.2,
+            "description": "Failed to penetrate the inner defenses. Partial progress noted.",
+            "success": false
+        }
+    ],
+    "strategies": [
+        {
+            "id": "direct",
+            "name": "Direct Approach",
+            "description": "Push forward without delay."
+        },
+        {
+            "id": "cautious",
+            "name": "Cautious Approach",
+            "description": "Gather intel before advancing."
+        }
+    ],
+    "reference_policy": [
+        "proceed",
+        "proceed",
+        "proceed"
+    ],
+    "reference_score": 1.0,
+    "seed": 42
+}

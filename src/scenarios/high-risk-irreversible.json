@@ -1,0 +1,245 @@
+{
+    "scenario_id": "high_risk_irreversible",
+    "title": "Point of No Return — High Risk, Irreversible",
+    "description": "Decisions in the deeper layers cannot be undone. High stakes, high risk, irreversible commitments. Tests risk attitude under permanent commitment pressure.",
+    "layers": 4,
+    "states": [
+        {
+            "id": "hr_l0",
+            "layer": 0,
+            "name": "Last Safe Position",
+            "description": "This is the last point where withdrawal is free. Beyond here, decisions are binding.",
+            "availableActions": [
+                "proceed",
+                "gather_info",
+                "withdraw"
+            ],
+            "irreversible": false
+        },
+        {
+            "id": "hr_l1",
+            "layer": 1,
+            "name": "Committed Advance",
+            "description": "You have committed. No retreat without heavy cost.",
+            "availableActions": [
+                "proceed",
+                "gather_info",
+                "change_strategy"
+            ],
+            "irreversible": true
+        },
+        {
+            "id": "hr_l2",
+            "layer": 2,
+            "name": "Deep Commitment",
+            "description": "Heavy resistance. Every action has permanent consequences.",
+            "availableActions": [
+                "proceed",
+                "gather_info"
+            ],
+            "irreversible": true
+        },
+        {
+            "id": "hr_l3",
+            "layer": 3,
+            "name": "Final Stand",
+            "description": "The last decision. All-or-nothing.",
+            "availableActions": [
+                "proceed"
+            ],
+            "irreversible": true
+        },
+        {
+            "id": "hr_triumph",
+            "layer": 4,
+            "name": "Decisive Victory",
+            "description": "Took the ultimate risk and prevailed.",
+            "availableActions": [],
+            "irreversible": true
+        },
+        {
+            "id": "hr_collapse",
+            "layer": 4,
+            "name": "Total Collapse",
+            "description": "The irreversible gamble failed catastrophically.",
+            "availableActions": [],
+            "irreversible": true
+        },
+        {
+            "id": "hr_stalemate",
+            "layer": 4,
+            "name": "Costly Stalemate",
+            "description": "Neither victory nor defeat — resources exhausted in a war of attrition.",
+            "availableActions": [],
+            "irreversible": true
+        }
+    ],
+    "actions": [],
+    "hidden_information": [
+        {
+            "id": "hr_h1",
+            "layer": 0,
+            "description": "True strength of inner defenses",
+            "value": "Inner layers have 3x the expected resistance",
+            "revealCost": 3
+        },
+        {
+            "id": "hr_h2",
+            "layer": 1,
+            "description": "Escape route existence",
+            "value": "A narrow corridor on the south can be used for emergency extraction",
+            "revealCost": 5
+        },
+        {
+            "id": "hr_h3",
+            "layer": 2,
+            "description": "Commander vulnerability",
+            "value": "The central command node is unshielded from the east",
+            "revealCost": 6
+        },
+        {
+            "id": "hr_h4",
+            "layer": 2,
+            "description": "Reinforcement timing",
+            "value": "Enemy reinforcements arrive at time=5, making delay costly",
+            "revealCost": 4
+        }
+    ],
+    "risk_level": 0.5,
+    "uncertainty_level": 0.6,
+    "resources": 20,
+    "time_limit": 12,
+    "information_cost": 4,
+    "transition_rules": [
+        {
+            "fromState": "hr_l0",
+            "action": "proceed",
+            "toState": "hr_l1",
+            "toLayer": 1,
+            "resourceCost": 3,
+            "timeCost": 1,
+            "riskDelta": 0.15,
+            "irreversible": true,
+            "probability": 1.0,
+            "narrative": "You cross the point of no return. There is no easy way back."
+        },
+        {
+            "fromState": "hr_l1",
+            "action": "proceed",
+            "toState": "hr_l2",
+            "toLayer": 2,
+            "resourceCost": 5,
+            "timeCost": 2,
+            "riskDelta": 0.15,
+            "irreversible": true,
+            "probability": 0.7,
+            "narrative": "Deeper into irreversible territory. The stakes compound."
+        },
+        {
+            "fromState": "hr_l1",
+            "action": "proceed",
+            "toState": "hr_stalemate",
+            "toLayer": 4,
+            "resourceCost": 8,
+            "timeCost": 4,
+            "riskDelta": 0.3,
+            "irreversible": true,
+            "probability": 0.3,
+            "narrative": "The advance stalls. Resources drain in a war of attrition."
+        },
+        {
+            "fromState": "hr_l2",
+            "action": "proceed",
+            "toState": "hr_l3",
+            "toLayer": 3,
+            "resourceCost": 4,
+            "timeCost": 2,
+            "riskDelta": 0.1,
+            "irreversible": true,
+            "probability": 0.6,
+            "narrative": "Push through to the final stand. Everything rides on the next move."
+        },
+        {
+            "fromState": "hr_l2",
+            "action": "proceed",
+            "toState": "hr_collapse",
+            "toLayer": 4,
+            "resourceCost": 6,
+            "timeCost": 3,
+            "riskDelta": 0.5,
+            "irreversible": true,
+            "probability": 0.4,
+            "narrative": "The formation overwhelms you. Total collapse."
+        },
+        {
+            "fromState": "hr_l3",
+            "action": "proceed",
+            "toState": "hr_triumph",
+            "toLayer": 4,
+            "resourceCost": 5,
+            "timeCost": 2,
+            "riskDelta": 0.2,
+            "irreversible": true,
+            "probability": 0.55,
+            "narrative": "Against all odds, you break through. Decisive victory."
+        },
+        {
+            "fromState": "hr_l3",
+            "action": "proceed",
+            "toState": "hr_collapse",
+            "toLayer": 4,
+            "resourceCost": 5,
+            "timeCost": 2,
+            "riskDelta": 0.5,
+            "irreversible": true,
+            "probability": 0.45,
+            "narrative": "The final push fails. Irreversible commitment meets immovable defense."
+        }
+    ],
+    "outcomes": [
+        {
+            "stateId": "hr_triumph",
+            "score": 1.0,
+            "description": "Decisive victory through committed, high-risk advance.",
+            "success": true
+        },
+        {
+            "stateId": "hr_collapse",
+            "score": 0.05,
+            "description": "Total collapse. The irreversible gamble failed catastrophically.",
+            "success": false
+        },
+        {
+            "stateId": "hr_stalemate",
+            "score": 0.3,
+            "description": "Costly stalemate. Neither victory nor defeat, but resources exhausted.",
+            "success": false
+        }
+    ],
+    "strategies": [
+        {
+            "id": "all_in",
+            "name": "All-In Assault",
+            "description": "Commit everything immediately. Speed over caution."
+        },
+        {
+            "id": "calculated",
+            "name": "Calculated Risk",
+            "description": "Gather intel on key layers before committing."
+        },
+        {
+            "id": "preserve",
+            "name": "Resource Preservation",
+            "description": "Conserve resources for the final push."
+        }
+    ],
+    "reference_policy": [
+        "gather_info",
+        "proceed",
+        "gather_info",
+        "proceed",
+        "proceed"
+    ],
+    "reference_score": 0.75,
+    "seed": 300
+}

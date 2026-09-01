@@ -1,0 +1,216 @@
+{
+    "scenario_id": "low_uncertainty",
+    "title": "Clear Passage — Low Uncertainty",
+    "description": "Most information is available from the start. Tests baseline decision quality when the environment is largely transparent. Moderate resources, 5 layers.",
+    "layers": 5,
+    "states": [
+        {
+            "id": "lu_l0",
+            "layer": 0,
+            "name": "Perimeter Scout",
+            "description": "Full reconnaissance data available. Clear lines of advance.",
+            "availableActions": [
+                "proceed",
+                "gather_info",
+                "withdraw"
+            ],
+            "irreversible": false
+        },
+        {
+            "id": "lu_l1",
+            "layer": 1,
+            "name": "Outer Formation",
+            "description": "Predictable defensive patterns. Resource management is key.",
+            "availableActions": [
+                "proceed",
+                "gather_info",
+                "change_strategy",
+                "withdraw"
+            ],
+            "irreversible": false
+        },
+        {
+            "id": "lu_l2",
+            "layer": 2,
+            "name": "Mid Formation",
+            "description": "Deeper into the formation. Minor uncertainty in timing.",
+            "availableActions": [
+                "proceed",
+                "gather_info",
+                "change_strategy",
+                "withdraw"
+            ],
+            "irreversible": false
+        },
+        {
+            "id": "lu_l3",
+            "layer": 3,
+            "name": "Inner Formation",
+            "description": "Most defensive positions mapped. Final preparations needed.",
+            "availableActions": [
+                "proceed",
+                "gather_info",
+                "withdraw"
+            ],
+            "irreversible": false
+        },
+        {
+            "id": "lu_l4",
+            "layer": 4,
+            "name": "Core Approach",
+            "description": "The final approach to the center. All remaining info can be gathered.",
+            "availableActions": [
+                "proceed",
+                "withdraw"
+            ],
+            "irreversible": false
+        },
+        {
+            "id": "lu_success",
+            "layer": 5,
+            "name": "Center Secured",
+            "description": "Formation penetrated with full awareness.",
+            "availableActions": [],
+            "irreversible": false
+        },
+        {
+            "id": "lu_partial",
+            "layer": 5,
+            "name": "Deflected at Core",
+            "description": "Progress halted at the final layer due to resource mismanagement.",
+            "availableActions": [],
+            "irreversible": false
+        }
+    ],
+    "actions": [],
+    "hidden_information": [
+        {
+            "id": "lu_h1",
+            "layer": 1,
+            "description": "Guard shift schedule at outer ring",
+            "value": "Shift change at time=8, 30-second window",
+            "revealCost": 1
+        },
+        {
+            "id": "lu_h2",
+            "layer": 3,
+            "description": "Reserve force positioning",
+            "value": "Reserves concentrated on western flank",
+            "revealCost": 2
+        }
+    ],
+    "risk_level": 0.15,
+    "uncertainty_level": 0.2,
+    "resources": 25,
+    "time_limit": 20,
+    "information_cost": 1,
+    "transition_rules": [
+        {
+            "fromState": "lu_l0",
+            "action": "proceed",
+            "toState": "lu_l1",
+            "toLayer": 1,
+            "resourceCost": 2,
+            "timeCost": 1,
+            "riskDelta": 0.05,
+            "irreversible": false,
+            "probability": 1.0,
+            "narrative": "Advance through the perimeter. Scouts have cleared the way."
+        },
+        {
+            "fromState": "lu_l1",
+            "action": "proceed",
+            "toState": "lu_l2",
+            "toLayer": 2,
+            "resourceCost": 3,
+            "timeCost": 2,
+            "riskDelta": 0.05,
+            "irreversible": false,
+            "probability": 1.0,
+            "narrative": "Move into the mid formation. Defenses are predictable."
+        },
+        {
+            "fromState": "lu_l2",
+            "action": "proceed",
+            "toState": "lu_l3",
+            "toLayer": 3,
+            "resourceCost": 3,
+            "timeCost": 2,
+            "riskDelta": 0.1,
+            "irreversible": false,
+            "probability": 0.85,
+            "narrative": "Push through to inner formation. Some timing uncertainty here."
+        },
+        {
+            "fromState": "lu_l2",
+            "action": "proceed",
+            "toState": "lu_partial",
+            "toLayer": 5,
+            "resourceCost": 5,
+            "timeCost": 3,
+            "riskDelta": 0.25,
+            "irreversible": false,
+            "probability": 0.15,
+            "narrative": "Mistimed the advance — formation closes around you."
+        },
+        {
+            "fromState": "lu_l3",
+            "action": "proceed",
+            "toState": "lu_l4",
+            "toLayer": 4,
+            "resourceCost": 4,
+            "timeCost": 2,
+            "riskDelta": 0.1,
+            "irreversible": false,
+            "probability": 1.0,
+            "narrative": "Approach the core. Final defenses are mapped."
+        },
+        {
+            "fromState": "lu_l4",
+            "action": "proceed",
+            "toState": "lu_success",
+            "toLayer": 5,
+            "resourceCost": 5,
+            "timeCost": 2,
+            "riskDelta": 0.15,
+            "irreversible": false,
+            "probability": 1.0,
+            "narrative": "Break through the core. The center is secured."
+        }
+    ],
+    "outcomes": [
+        {
+            "stateId": "lu_success",
+            "score": 1.0,
+            "description": "Complete success. All five layers breached with situational awareness.",
+            "success": true
+        },
+        {
+            "stateId": "lu_partial",
+            "score": 0.35,
+            "description": "Deflected at the core. Progress was good but timing failed.",
+            "success": false
+        }
+    ],
+    "strategies": [
+        {
+            "id": "steady",
+            "name": "Steady Advance",
+            "description": "Methodical push through each layer."
+        },
+        {
+            "id": "rapid",
+            "name": "Rapid Penetration",
+            "description": "Speed-focused approach sacrificing thoroughness."
+        }
+    ],
+    "reference_policy": [
+        "proceed",
+        "proceed",
+        "proceed",
+        "proceed",
+        "proceed"
+    ],
+    "reference_score": 1.0,
+    "seed": 100
+}
